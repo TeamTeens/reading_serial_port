@@ -47,13 +47,13 @@ function values () {
   return new Promise ( function (resolve) {
 
     const http = new XMLHttpRequest();
-    const url = 'http://www.amiiboapi.com/api/amiibo/?character=zelda';
+    const url = 'http://192.168.0.130:3000/palestra/api/show';
     http.open('GET', url);
     http.send();
   
     http.onload = (e) => {
-      chars = JSON.parse(http.response).amiibo.map(e => e.amiiboSeries);
-      resolve(chars)
+      palestras = JSON.parse(http.response);
+      resolve(palestras)
     }
 
   });
