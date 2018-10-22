@@ -1,6 +1,6 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+// // This file is required by the index.html file and will
+// // be executed in the renderer process for that window.
+// // All of the Node.js APIs are available in this process.
 
 // const serialport = require('serialport')
 // const createTable = require('data-table')
@@ -27,7 +27,10 @@
 //   table.end();
 // })
 
-// var port = new serialport('/dev/ttyACM0', { autoOpen: true });
+// var port = new serialport,('/dev/ttyACM0', {   
+//   baudrate: 2400,
+//   parser: serialport.parsers.readline("\n") 
+// }, false);
 
 // port.on('open', function() {
 //   console.log("Hey, está aberto, esteja à vontade.")
@@ -42,12 +45,16 @@
 // });
 
 
+const baseApi = "http://201.6.243.44:3827"
+
+// consuming api to display values
+
 function values () {
 
   return new Promise ( function (resolve) {
 
     const http = new XMLHttpRequest();
-    const url = 'http://192.168.0.130:3000/palestra/api/show';
+    const url = `${baseApi}/palestra/api/show`;
     http.open('GET', url);
     http.send();
   
@@ -63,8 +70,9 @@ function values () {
 function confirmarPresenca (documentoAluno,palestraId) {
 
   return new Promise (function (resolve) {
+
     const http = new XMLHttpRequest();
-    const url = `http://192.168.0.130:3000/email/${documentoAluno}-${palestraId}`
+    const url = `${baseApi}/email/${documentoAluno}-${palestraId}`
     http.open('GET', url);
     http.send();
   
