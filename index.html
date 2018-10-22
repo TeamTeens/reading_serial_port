@@ -12,9 +12,16 @@
     Electron <script>document.write(process.versions.electron)</script>,
     and Serialport <script>document.write(require('serialport/package').version)</script>.
 
-    <select id="selectAmiibosList">
-      <option value="firstValue">Selecionar um evento...</option>
-    </select>
+    <form>
+
+      <!-- select que exibe as palestras  -->
+      <select id="palestrasSelect">
+        <option>Selecionar um evento...</option>
+      </select>
+
+      <!-- botao de submit -->
+      <input type="button" value="Enviar" onclick="confirmarPresencaForm()">
+    </form>
 
     <div id="error"></div>
     <div id="ports"></div>
@@ -24,10 +31,19 @@
     // You can also require other files to run in this process
     const something = require('./renderer.js');
 
+    async function confirmarPresencaForm () {
+
+      const documentId = "123"
+      const palestraSelecionada = document.getElementById("palestrasSelect").value
+      let funcionou = await something.confirmarPresenca(documentId, palestraSelecionada)
+      console.log(funcionou)
+
+    }
+
     async function populateAmiibos () {
       var values = await something.values()
       console.log(values)
-      var selectAmiibos = document.getElementById('selectAmiibosList')
+      var selectAmiibos = document.getElementById('palestrasSelect')
       for (var i = 0; i < values.length; i++) {
         var option = document.createElement('option')
         option.innerHTML = values[i].titulo
@@ -37,6 +53,8 @@
     } 
 
     populateAmiibos()
+
+    
 
   </script>
 </html>

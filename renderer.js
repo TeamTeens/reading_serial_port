@@ -60,4 +60,20 @@ function values () {
 
 }
 
-module.exports = { values }
+function confirmarPresenca (documentoAluno,palestraId) {
+
+  return new Promise (function (resolve) {
+    const http = new XMLHttpRequest();
+    const url = `http://192.168.0.130:3000/email/${documentoAluno}-${palestraId}`
+    http.open('GET', url);
+    http.send();
+  
+    http.onload = (e) => {
+      console.log(http.response)
+      resolve(http.status == 200) //significa que funcionou
+    }
+  });
+
+}
+
+module.exports = { values, confirmarPresenca }
