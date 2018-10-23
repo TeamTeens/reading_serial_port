@@ -5,41 +5,21 @@
 const serialport = require('serialport')
 const createTable = require('data-table')
 
-serialport.list((err, ports) => {
-
-  if (err) {
-    document.getElementById('error').textContent = err.message
-    return
-  } else {
-    document.getElementById('error').textContent = ''
-  }
-
-  if (ports.length === 0) {
-    document.getElementById('error').textContent = 'No ports discovered'
-  }
-
-  const headers = Object.keys(ports[0])
-  const table = createTable(headers)
-  tableHTML = ''
-  table.on('data', data => tableHTML += data)
-  table.on('end', () => document.getElementById('ports').innerHTML = tableHTML)
-  ports.forEach(port => table.write(port))
-  table.end();
-})
-
-var port = new serialport('/dev/ttyACM0', { autoOpen: true });
-
-port.on('open', function() {
-  console.log("Hey, está aberto, esteja à vontade.")
-  // Read data that is available but keep the stream from entering "flowing mode"
-
+var port = new serialport('/dev/ttyACM0', {
+  baudRate: 9600,
+  parser: new serialport.parsers.Readline('\r\n')
 });
 
-const ByteLength = serialport.parsers.ByteLength;
-const parser = port.pipe(new ByteLength({length: 12}));
-parser.on('data', function (data) {
-    console.log(data.toString());
-});
+port.on('open', onOpen);
+port.on('data', onData);
+
+function onOpen(){
+    console.log('Open connections!');
+}
+
+function onData(data){
+    console.log('on Data ' + data);
+}
 
 // consuming api to display values
 const baseApi = "http://201.6.243.44:3827"
