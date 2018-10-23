@@ -2,24 +2,19 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-const serialport = require('serialport')
-const createTable = require('data-table')
+var SerialPort = require('serialport');
+var createInterface = require('readline').createInterface;
 
-var port = new serialport('/dev/ttyACM0', {
-  baudRate: 9600,
-  parser: new serialport.parsers.Readline('\r\n')
+var port = new SerialPort('/dev/ttyACM1');
+
+var lineReader = createInterface({
+  input: port
 });
 
-port.on('open', onOpen);
-port.on('data', onData);
+lineReader.on('line', function (line) {
+  console.log(line);
+});
 
-function onOpen(){
-    console.log('Open connections!');
-}
-
-function onData(data){
-    console.log('on Data ' + data);
-}
 
 // consuming api to display values
 const baseApi = "http://201.6.243.44:3827"
@@ -52,7 +47,6 @@ function confirmarPresenca (documentoAluno,palestraId) {
     http.send();
   
     http.onload = (e) => {
-      console.log(http.response)
       resolve(http.status == 200) //significa que funcionou
     }
   });

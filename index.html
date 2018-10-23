@@ -40,9 +40,8 @@
 
     }
 
-    async function populateAmiibos () {
+    async function popularPalestras () {
       var values = await something.values()
-      console.log(values)
       var selectAmiibos = document.getElementById('palestrasSelect')
       for (var i = 0; i < values.length; i++) {
         var option = document.createElement('option')
@@ -52,9 +51,7 @@
       }
     } 
 
-    populateAmiibos()
-
-    
+    popularPalestras()
 
   </script>
 </html>
