@@ -3,16 +3,18 @@ var createInterface = require('readline').createInterface
 
 var port = new SerialPort('/dev/ttyACM1')
 
-var events = require('events').EventEmitter;
-var emitter = new events.EventEmitter()
-
 var lineReader = createInterface({
   input: port
 });
 
+var events = require('events').EventEmitter;
+var emitter = new events.EventEmitter()
+
 var ultimaLinha = ''
 
 lineReader.on('line', function (line) {
+
+    line = line.trim()
 
     if (ultimaLinha != line) {
         ultimaLinha = line
@@ -21,4 +23,4 @@ lineReader.on('line', function (line) {
   
 });
 
-module.exports = { emitter }
+module.exports = { emitter}

@@ -32,33 +32,35 @@
     const palestrasApi = require('./renderer.js');
     const serialListener = require('./serial-listener.js');
 
-    async function confirmarPresencaForm () {
+    async function confirmarPresencaForm (documentId) {
 
-      const documentId = "123"
       const palestraSelecionada = document.getElementById("palestrasSelect").value
-      let funcionou = await palestrasApi.confirmarPresenca(documentId, palestraSelecionada)
-      console.log(funcionou)
-
+      let result = await palestrasApi.confirmarPresenca(documentId, palestraSelecionada)
+      if (result) {
+        console.log("Funcionou! Presença confirmada e certificado enviado")
+      } else {
+        console.log("Não funcionou. Aluno deve não ter se cadastrada para essa palestra")
+      }
     }
+
+    var capturaEventos = serialListener.emitter
+    capturaEventos.on('novo-identificador', function(linha) {
+      console.log('da main: ' + linha)
+      confirmarPresencaForm(linha)
+    })
 
     async function popularPalestras () {
       var values = await palestrasApi.recuperarPalestras()
-      var selectAmiibos = document.getElementById('palestrasSelect')
+      var selectPalestras = document.getElementById('palestrasSelect')
       for (var i = 0; i < values.length; i++) {
         var option = document.createElement('option')
         option.innerHTML = values[i].titulo
         option.value = values[i].id
-        selectAmiibos.appendChild(option)
+        selectPalestras.appendChild(option)
       }
     } 
 
     popularPalestras()
-
-    var capturaEventos = serialListener.emitter
-
-    capturaEventos.on('novo-identificador', function(linha) {
-      console.log('da main: ' + linha)
-    })
 
   </script>
 </html>

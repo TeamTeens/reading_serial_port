@@ -20,10 +20,13 @@ function recuperarPalestras () {
 
 function confirmarPresenca (documentoAluno,palestraId) {
 
+  console.log("Confirmando presença: " + documentoAluno + "-" + palestraId)
+
   return new Promise (function (resolve) {
 
     const http = new XMLHttpRequest();
     const url = `${baseApi}/email/${documentoAluno}-${palestraId}`
+    console.log(url)
     http.open('GET', url);
     http.send();
   
