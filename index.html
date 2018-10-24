@@ -29,19 +29,20 @@
 
   <script>
     // You can also require other files to run in this process
-    const something = require('./renderer.js');
+    const palestrasApi = require('./renderer.js');
+    const serialListener = require('./serial-listener.js');
 
     async function confirmarPresencaForm () {
 
       const documentId = "123"
       const palestraSelecionada = document.getElementById("palestrasSelect").value
-      let funcionou = await something.confirmarPresenca(documentId, palestraSelecionada)
+      let funcionou = await palestrasApi.confirmarPresenca(documentId, palestraSelecionada)
       console.log(funcionou)
 
     }
 
     async function popularPalestras () {
-      var values = await something.values()
+      var values = await palestrasApi.recuperarPalestras()
       var selectAmiibos = document.getElementById('palestrasSelect')
       for (var i = 0; i < values.length; i++) {
         var option = document.createElement('option')
@@ -52,6 +53,12 @@
     } 
 
     popularPalestras()
+
+    var capturaEventos = serialListener.emitter
+
+    capturaEventos.on('novo-identificador', function(linha) {
+      console.log('da main: ' + linha)
+    })
 
   </script>
 </html>

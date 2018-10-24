@@ -1,25 +1,6 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
-
-var SerialPort = require('serialport');
-var createInterface = require('readline').createInterface;
-
-var port = new SerialPort('/dev/ttyACM1');
-
-var lineReader = createInterface({
-  input: port
-});
-
-lineReader.on('line', function (line) {
-  console.log(line);
-});
-
-
-// consuming api to display values
 const baseApi = "http://201.6.243.44:3827"
 
-function values () {
+function recuperarPalestras () {
 
   return new Promise ( function (resolve) {
 
@@ -53,4 +34,4 @@ function confirmarPresenca (documentoAluno,palestraId) {
 
 }
 
-module.exports = { values, confirmarPresenca }
+module.exports = { recuperarPalestras, confirmarPresenca }
