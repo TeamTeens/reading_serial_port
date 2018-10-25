@@ -28,40 +28,47 @@
   </body>
 
   <script>
-    // You can also require other files to run in this process
-    const palestrasApi = require('./renderer.js');
+
+    const palestrasApi = require('./api-consumer.js');
     const serialListener = require('./serial-listener.js');
 
     async function confirmarPresencaForm (documentId) {
 
       const palestraSelecionada = document.getElementById("palestrasSelect").value
-      let result = await palestrasApi.confirmarPresenca(documentId, palestraSelecionada)
-      if (result) {
+      let resultado = await palestrasApi.confirmarPresenca(documentId, palestraSelecionada)
+      if (resultado === palestrasApi.BEM_SUCEDIDO) {
         console.log("Funcionou! Presença confirmada e certificado enviado")
-      } else {
+      } else if (resultado === palestrasApi.NAO_REGISTRADO || resultado === palestrasApi.ERRO_REGISTRO) {
         console.log("Não funcionou. Aluno deve não ter se cadastrada para essa palestra")
-      }
+        serialListener.reset()
+      } 
     }
 
     var capturaEventos = serialListener.emitter
     capturaEventos.on('novo-identificador', function(linha) {
-      console.log('da main: ' + linha)
       confirmarPresencaForm(linha)
     })
 
+  </script>
+
+  <!-- script de preenchimento do select box usando a api-->
+  <script>
+    console.log
     async function popularPalestras () {
+      
       var values = await palestrasApi.recuperarPalestras()
       var selectPalestras = document.getElementById('palestrasSelect')
-      for (var i = 0; i < values.length; i++) {
+
+      values.map(palestra => {
         var option = document.createElement('option')
-        option.innerHTML = values[i].titulo
-        option.value = values[i].id
+        option.innerHTML = palestra.titulo
+        option.value = palestra.id
+
         selectPalestras.appendChild(option)
-      }
+      })
     } 
 
     popularPalestras()
-
   </script>
 </html>
 
